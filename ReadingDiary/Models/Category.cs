@@ -12,17 +12,10 @@ namespace ReadingDiary.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Reading
+    public partial class Category
     {
         public int Id { get; set; }
-        public string Title { get; set; }
-        public string Author { get; set; }
-        public string Link { get; set; }
-        public Nullable<int> Rating { get; set; }
-        public string Summary { get; set; }
-        public Nullable<System.DateTime> DateRead { get; set; }
-        public Nullable<int> Category { get; set; }
-        public Nullable<int> Favorite { get; set; }
-        public Nullable<int> UserId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
     }
 }

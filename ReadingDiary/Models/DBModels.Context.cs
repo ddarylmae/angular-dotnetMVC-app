@@ -26,5 +26,7 @@ namespace ReadingDiary.Models
         }
     
         public virtual DbSet<Reading> Readings { get; set; }
+        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
     }
 }
