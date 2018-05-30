@@ -6,8 +6,8 @@
     <edmx:Diagrams>
       <Diagram DiagramId="a9b7707b20fb4b5cacad63f09a1d4e24" Name="Diagram1">
         <EntityTypeShape EntityType="ReadingDiaryModel.Reading" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ReadingDiaryModel.User" Width="1.5" PointX="3.375" PointY="0.75" />
         <EntityTypeShape EntityType="ReadingDiaryModel.Category" Width="1.5" PointX="3.375" PointY="3.75" />
+        <EntityTypeShape EntityType="ReadingDiaryModel.User" Width="1.5" PointX="3.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
