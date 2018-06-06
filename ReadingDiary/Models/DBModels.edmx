@@ -20,13 +20,14 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Title" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Author" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Link" Type="varchar" MaxLength="50" />
+          <Property Name="Link" Type="varchar" MaxLength="200" />
           <Property Name="Rating" Type="int" />
           <Property Name="Summary" Type="varchar" MaxLength="300" />
           <Property Name="DateRead" Type="datetime" />
           <Property Name="Category" Type="int" />
           <Property Name="Favorite" Type="int" />
           <Property Name="UserId" Type="int" />
+          <Property Name="Deleted" Type="int" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -48,25 +49,10 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ReadingDiaryModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Reading">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Author" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Link" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Rating" Type="Int32" />
-          <Property Name="Summary" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
-          <Property Name="DateRead" Type="DateTime" Precision="3" />
-          <Property Name="Category" Type="Int32" />
-          <Property Name="Favorite" Type="Int32" />
-          <Property Name="UserId" Type="Int32" />
-        </EntityType>
         <EntityContainer Name="ReadingDiaryEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Readings" EntityType="Self.Reading" />
           <EntitySet Name="Categories" EntityType="ReadingDiaryModel.Category" />
           <EntitySet Name="Users" EntityType="ReadingDiaryModel.User" />
+          <EntitySet Name="Readings" EntityType="ReadingDiaryModel.Reading" />
         </EntityContainer>
         <EntityType Name="Category">
           <Key>
@@ -87,28 +73,28 @@
           <Property Name="Firstname" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Lastname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="Reading">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Author" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Link" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Rating" Type="Int32" />
+          <Property Name="Summary" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="DateRead" Type="DateTime" Precision="3" />
+          <Property Name="Category" Type="Int32" />
+          <Property Name="Favorite" Type="Int32" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="Deleted" Type="Int32" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="ReadingDiaryModelStoreContainer" CdmEntityContainer="ReadingDiaryEntities">
-          <EntitySetMapping Name="Readings">
-            <EntityTypeMapping TypeName="ReadingDiaryModel.Reading">
-              <MappingFragment StoreEntitySet="Reading">
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="Author" ColumnName="Author" />
-                <ScalarProperty Name="Link" ColumnName="Link" />
-                <ScalarProperty Name="Rating" ColumnName="Rating" />
-                <ScalarProperty Name="Summary" ColumnName="Summary" />
-                <ScalarProperty Name="DateRead" ColumnName="DateRead" />
-                <ScalarProperty Name="Category" ColumnName="Category" />
-                <ScalarProperty Name="Favorite" ColumnName="Favorite" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Categories">
             <EntityTypeMapping TypeName="ReadingDiaryModel.Category">
               <MappingFragment StoreEntitySet="Category">
@@ -126,6 +112,23 @@
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Readings">
+            <EntityTypeMapping TypeName="ReadingDiaryModel.Reading">
+              <MappingFragment StoreEntitySet="Reading">
+                <ScalarProperty Name="Deleted" ColumnName="Deleted" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Favorite" ColumnName="Favorite" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="DateRead" ColumnName="DateRead" />
+                <ScalarProperty Name="Summary" ColumnName="Summary" />
+                <ScalarProperty Name="Rating" ColumnName="Rating" />
+                <ScalarProperty Name="Link" ColumnName="Link" />
+                <ScalarProperty Name="Author" ColumnName="Author" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

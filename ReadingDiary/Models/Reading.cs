@@ -24,5 +24,6 @@ namespace ReadingDiary.Models
         public Nullable<int> Category { get; set; }
         public Nullable<int> Favorite { get; set; }
         public Nullable<int> UserId { get; set; }
+        public Nullable<int> Deleted { get; set; }
     }
 }

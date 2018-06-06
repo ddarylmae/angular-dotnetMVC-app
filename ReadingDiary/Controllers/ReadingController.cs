@@ -13,6 +13,7 @@ using ReadingDiary.Models;
 
 namespace ReadingDiary.Controllers
 {
+    [Authorize]
     [EnableCors(origins: "http://localhost:4200", headers: "*", methods: "*")]
     public class ReadingController : ApiController
     {
