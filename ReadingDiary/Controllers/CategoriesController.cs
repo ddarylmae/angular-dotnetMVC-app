@@ -7,11 +7,14 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using ReadingDiary.Models;
 
 namespace ReadingDiary.Controllers
 {
+    [Authorize]
+    [EnableCors(origins: "http://localhost:4200", headers: "*", methods: "*")]
     public class CategoriesController : ApiController
     {
         private ReadingDiaryEntities db = new ReadingDiaryEntities();

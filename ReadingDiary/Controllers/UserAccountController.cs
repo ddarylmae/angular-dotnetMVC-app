@@ -129,7 +129,7 @@ namespace ReadingDiary.Controllers
             //Set issued at date
             DateTime issuedAt = DateTime.UtcNow;
             //set the time when it expires
-            DateTime expires = DateTime.UtcNow.AddDays(7);
+            DateTime expires = DateTime.UtcNow.AddDays(1);
 
             //http://stackoverflow.com/questions/18223868/how-to-encrypt-jwt-security-token
             var tokenHandler = new JwtSecurityTokenHandler();
