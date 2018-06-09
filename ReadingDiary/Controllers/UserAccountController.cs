@@ -33,14 +33,16 @@ namespace ReadingDiary.Controllers
             }
             else if (db.Users.Any(u => u.Email == user.Email))
             {
-                ModelState.AddModelError("Email", "Email already registered.");
+                ModelState.AddModelError("Registration", "Email already registered.");
+                return BadRequest(ModelState);
+            }
+            else if (db.Users.Any(u => u.Username == user.Username))
+            {
+                ModelState.AddModelError("Registration", "Username already registered.");
                 return BadRequest(ModelState);
             }
             else
             {
-                //user.Password = HashFunction(user.Password);
-                //byte[] passwordHash, passwordSalt;
-                //user.Password = CreatePasswordHash(user.Password, out passwordHash, out passwordSalt);
                 string key = "4521";
                 user.Password = GenerateHMac(key, user.Password);
                 db.Users.Add(user);
@@ -75,9 +77,6 @@ namespace ReadingDiary.Controllers
         public IHttpActionResult Authenticate([FromBody] LoginRequest login)
         {
             var loginResponse = new LoginResponse { };
-            //LoginRequest loginrequest = new LoginRequest { };
-            //loginrequest.Username = login.Username.ToLower();
-            //loginrequest.Password = login.Password;
 
             IHttpActionResult response;
             HttpResponseMessage responseMsg = new HttpResponseMessage();
@@ -89,14 +88,17 @@ namespace ReadingDiary.Controllers
                 //isUsernamePasswordValid = loginrequest.Password == "admin" ? true : false;
                 //User user = db.Users.Find(login.Username);
                 User user = db.Users.FirstOrDefault(x => x.Username == login.Username);
-                //byte[] passwordHash, passwordSalt;
-                //string pass = CreatePasswordHash(login.Password, out passwordHash, out passwordSalt);
-                //string pass = this.HashFunction(login.Password);
+                if (user==null)
+                {
+                    user = db.Users.FirstOrDefault(x => x.Email == login.Username);
+                }
+                
                 string key = "4521";
                 string pass = GenerateHMac(key, login.Password);
                 if (user!=null && pass.Equals(user.Password))
                 {
-                    string token = createToken(login.Username);
+                    //string token = createToken(login.Username);
+                    string token = createToken(user);
                     //return the token
                     return Ok<string>(token);
                 }
@@ -124,7 +126,7 @@ namespace ReadingDiary.Controllers
             return Convert.ToBase64String(hash);
         }
 
-        private string createToken(string username)
+        private string createToken(User user)
         {
             //Set issued at date
             DateTime issuedAt = DateTime.UtcNow;
@@ -137,7 +139,11 @@ namespace ReadingDiary.Controllers
             //create a identity and add claims to the user which we want to log in
             ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[]
             {
-                new Claim(ClaimTypes.Name, username)
+                //new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Firstname),
+                new Claim(ClaimTypes.Surname, user.Lastname),
+                new Claim(ClaimTypes.Email, user.Email)
             });
 
             const string sec = "401b09eab3c013d4ca54922bb802bec8fd5318192b0a75f201d8b3727429090fb337591abd3e44453b954555b7a0812e1081c39b740293f765eae731f5a65ed1";
