@@ -80,13 +80,10 @@ namespace ReadingDiary.Controllers
 
             IHttpActionResult response;
             HttpResponseMessage responseMsg = new HttpResponseMessage();
-            //bool isUsernamePasswordValid = false;
 
             //Check credentials
             if (login != null)
             {
-                //isUsernamePasswordValid = loginrequest.Password == "admin" ? true : false;
-                //User user = db.Users.Find(login.Username);
                 User user = db.Users.FirstOrDefault(x => x.Username == login.Username);
                 if (user==null)
                 {
@@ -97,7 +94,6 @@ namespace ReadingDiary.Controllers
                 string pass = GenerateHMac(key, login.Password);
                 if (user!=null && pass.Equals(user.Password))
                 {
-                    //string token = createToken(login.Username);
                     string token = createToken(user);
                     //return the token
                     return Ok<string>(token);
@@ -132,14 +128,12 @@ namespace ReadingDiary.Controllers
             DateTime issuedAt = DateTime.UtcNow;
             //set the time when it expires
             DateTime expires = DateTime.UtcNow.AddDays(1);
-
-            //http://stackoverflow.com/questions/18223868/how-to-encrypt-jwt-security-token
+            
             var tokenHandler = new JwtSecurityTokenHandler();
 
             //create a identity and add claims to the user which we want to log in
             ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[]
             {
-                //new Claim(ClaimTypes.Name, user.Username),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Firstname),
                 new Claim(ClaimTypes.Surname, user.Lastname),
