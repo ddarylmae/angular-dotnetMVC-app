@@ -20,9 +20,16 @@ namespace ReadingDiary.Controllers
         private ReadingDiaryEntities db = new ReadingDiaryEntities();
 
         // GET: api/Reading
-        public IQueryable<Reading> GetReadings()
+        //public IQueryable<Reading> GetReadings()
+        //{
+        //    return db.Readings;
+        //}
+
+        [HttpGet, Route("api/Reading/user/{userId}")]
+        //api/Reading/id/readings
+        public IQueryable<Reading> GetReadingsByUserId(int userId)
         {
-            return db.Readings;
+            return db.Readings.Where(r => r.UserId == userId);
         }
 
         // GET: api/Reading/5
