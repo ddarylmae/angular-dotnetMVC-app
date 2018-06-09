@@ -51,28 +51,6 @@ namespace ReadingDiary.Controllers
             }            
         }
 
-        private string HashFunction(string pass)
-        {
-            byte[] salt;
-            new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
-            var pbkdf2 = new Rfc2898DeriveBytes(pass, salt, 1000);
-            byte[] hash = pbkdf2.GetBytes(20);
-            byte[] hashBytes = new byte[36];
-            Array.Copy(salt, 0, hashBytes, 0, 16);
-            Array.Copy(hash, 0, hashBytes, 16, 20);
-            return Convert.ToBase64String(hashBytes);
-        }
-
-        private string CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
-        {
-            using (var hmac = new System.Security.Cryptography.HMACSHA512())
-            {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));                
-            }
-            return Convert.ToBase64String(passwordHash);
-        }
-
         [HttpPost, AllowAnonymous, Route("api/useraccount/login")]
         public IHttpActionResult Authenticate([FromBody] LoginRequest login)
         {
@@ -94,7 +72,7 @@ namespace ReadingDiary.Controllers
                 string pass = GenerateHMac(key, login.Password);
                 if (user!=null && pass.Equals(user.Password))
                 {
-                    string token = createToken(user);
+                    string token = CreateToken(user);
                     //return the token
                     return Ok<string>(token);
                 }
@@ -122,7 +100,7 @@ namespace ReadingDiary.Controllers
             return Convert.ToBase64String(hash);
         }
 
-        private string createToken(User user)
+        private string CreateToken(User user)
         {
             //Set issued at date
             DateTime issuedAt = DateTime.UtcNow;
@@ -135,8 +113,8 @@ namespace ReadingDiary.Controllers
             ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Firstname),
-                new Claim(ClaimTypes.Surname, user.Lastname),
+                new Claim(ClaimTypes.Name, user.Id.ToString()),
+                new Claim(ClaimTypes.GivenName, user.Firstname),
                 new Claim(ClaimTypes.Email, user.Email)
             });
 
@@ -155,6 +133,5 @@ namespace ReadingDiary.Controllers
 
             return tokenString;
         }
-
     }
 }

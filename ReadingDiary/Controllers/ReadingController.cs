@@ -6,6 +6,8 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.Http.Description;
@@ -19,18 +21,12 @@ namespace ReadingDiary.Controllers
     {
         private ReadingDiaryEntities db = new ReadingDiaryEntities();
 
-        // GET: api/Reading
-        //public IQueryable<Reading> GetReadings()
-        //{
-        //    return db.Readings;
-        //}
-
-        [HttpGet, Route("api/Reading/user/{userId}")]
-        //api/Reading/id/readings
-        public IQueryable<Reading> GetReadingsByUserId(int userId)
+        //GET: api/Reading
+        public IQueryable<Reading> GetReadings()
         {
+            Int32.TryParse(User.Identity.Name, out int userId);
             return db.Readings.Where(r => r.UserId == userId);
-        }
+        }        
 
         // GET: api/Reading/5
         [ResponseType(typeof(Reading))]
@@ -124,5 +120,7 @@ namespace ReadingDiary.Controllers
         {
             return db.Readings.Count(e => e.Id == id) > 0;
         }
+
+
     }
 }
