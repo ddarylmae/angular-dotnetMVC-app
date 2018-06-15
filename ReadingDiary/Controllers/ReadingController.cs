@@ -41,6 +41,26 @@ namespace ReadingDiary.Controllers
             return Ok(reading);
         }
 
+        [HttpGet, Route("api/reading/count")]
+        public IHttpActionResult GetReadingsCount()
+        {
+            int count = 0;
+            count = GetReadings().Count();
+            return Ok(count);
+        }
+
+        [HttpGet, Route("api/reading/latest")]
+        public IHttpActionResult GetLatestReading()
+        {
+
+            Reading reading = GetReadings().OrderByDescending(x => x.DateRead).FirstOrDefault();
+            if (reading == null)
+            {
+                return NotFound();
+            }
+            return Ok(reading);
+        }
+
         // PUT: api/Reading/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutReading(int id, Reading reading)
@@ -84,7 +104,8 @@ namespace ReadingDiary.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            Int32.TryParse(User.Identity.Name, out int userId);
+            reading.UserId = userId;
             db.Readings.Add(reading);
             db.SaveChanges();
 
