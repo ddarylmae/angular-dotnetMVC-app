@@ -25,7 +25,7 @@ namespace ReadingDiary.Controllers
         public IQueryable<Reading> GetReadings()
         {
             Int32.TryParse(User.Identity.Name, out int userId);
-            return db.Readings.Where(r => r.UserId == userId);
+            return db.Readings.Where(r => r.UserId == userId).OrderByDescending(x => x.DateRead);
         }        
 
         // GET: api/Reading/5
@@ -37,7 +37,6 @@ namespace ReadingDiary.Controllers
             {
                 return NotFound();
             }
-
             return Ok(reading);
         }
 
@@ -49,11 +48,17 @@ namespace ReadingDiary.Controllers
             return Ok(count);
         }
 
+        [HttpGet, Route("api/reading/{id}/category")]
+        public IQueryable<Reading> GetReadingByCategory(int id)
+        {
+            Int32.TryParse(User.Identity.Name, out int userId);
+            return db.Readings.Where(r => r.UserId == userId && r.Category==id);
+        }
+
         [HttpGet, Route("api/reading/latest")]
         public IHttpActionResult GetLatestReading()
-        {
-
-            Reading reading = GetReadings().OrderByDescending(x => x.DateRead).FirstOrDefault();
+        {            
+            Reading reading = GetReadings().FirstOrDefault();
             if (reading == null)
             {
                 return NotFound();
