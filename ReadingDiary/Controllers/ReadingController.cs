@@ -66,6 +66,22 @@ namespace ReadingDiary.Controllers
             return Ok(reading);
         }
 
+        [HttpPut, Route("api/reading/{id}/fave")]
+        public IHttpActionResult UpdateFavoriteStatus(int id)
+        {
+            Reading reading = db.Readings.Find(id);
+            if (reading == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                reading.Favorite = (reading.Favorite==1) ? 0 : 1;
+                PutReading(id, reading);
+            }
+            return Ok(reading);
+        }
+
         // PUT: api/Reading/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutReading(int id, Reading reading)
