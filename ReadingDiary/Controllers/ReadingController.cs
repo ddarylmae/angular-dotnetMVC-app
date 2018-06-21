@@ -51,8 +51,7 @@ namespace ReadingDiary.Controllers
         [HttpGet, Route("api/reading/{id}/category")]
         public IQueryable<Reading> GetReadingByCategory(int id)
         {
-            Int32.TryParse(User.Identity.Name, out int userId);
-            return db.Readings.Where(r => r.UserId == userId && r.Category==id);
+            return GetReadings().Where(r => r.Category==id);
         }
 
         [HttpGet, Route("api/reading/latest")]
